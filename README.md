@@ -8,7 +8,7 @@ Aplikasi fullstack sederhana untuk mengelola katalog furniture. Pengguna dapat m
 Catalog/
 ├── fe/        # Frontend (React + Vite + TypeScript + Tailwind CSS)
 ├── backend/   # Backend (NestJS)
-└── docs/screenshots/
+└── screenshot/
 ```
 
 ## Data Utama: Furniture
@@ -60,3 +60,72 @@ cd backend
 npm install
 npm run start:dev   # http://localhost:3000
 ```
+
+### Frontend
+```bash
+cd fe
+npm install
+npm run dev         # http://localhost:5173
+```
+
+Jalankan keduanya bersamaan.
+
+## Tahapan Pengerjaan
+
+### 1. Setup project NestJS
+Project dibuat dengan Nest CLI, lalu dependensi validasi dipasang (`class-validator`, `class-transformer`).
+
+![Setup NestJS](screenshot/setup.png)
+
+### 2. Generate resource `furniture`
+Resource dibuat dengan `npx nest g resource furniture`, lalu Entity disesuaikan (8 field dengan tipe bervariasi).
+
+![Generate resource](screenshot/installation.png)
+
+### 3. Implementasi Service (CRUD di memori)
+`create`, `findAll`, `findOne`, `update`, `remove` dengan penyimpanan array di memori.
+
+![Service](screenshot/service.png)
+
+### 4. Implementasi Controller
+Seluruh endpoint (GET, POST, PATCH, DELETE) memanggil Service melalui dependency injection.
+
+![Controller](screenshot/controller.png)
+
+### 5. DTO dan Validasi
+`CreateFurnitureDto` dan `UpdateFurnitureDto` dengan class-validator; `ValidationPipe` diaktifkan global di `main.ts`.
+
+![DTO dan validasi](screenshot/dto.png)
+
+### 6. Penanganan error
+`NotFoundException` dan `ConflictException` di Service.
+
+![Error handling](screenshot/service.png)
+
+### 7. Pengujian endpoint dengan REST Client
+File pengujian: [`backend/requests.http`](backend/requests.http)
+
+![Request](screenshot/request.png)
+
+
+### 8. Integrasi frontend dan backend
+Frontend mengambil data dari API dan mendukung alur penuh: tambah, ubah, dan hapus data.
+
+**Tampilan awal (data dari backend)**
+![Tampilan awal](screenshot/default.png)
+
+**Tambah data (form pop-up)**
+![Tambah](screenshot/add.png)
+
+**Ubah data**
+![Ubah](screenshot/edit.png)
+
+**Hapus data**
+![Hapus](screenshot/delete.png)
+
+
+## Teknologi
+
+- **Frontend:** React, Vite, TypeScript, Tailwind CSS
+- **Backend:** NestJS, class-validator, class-transformer
+- **Pengujian API:** REST Client (VS Code)

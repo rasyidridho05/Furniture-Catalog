@@ -1,11 +1,8 @@
 @baseUrl = http://localhost:3000/furniture
 
-
 GET {{baseUrl}}
 
-
 GET {{baseUrl}}/1
-
 
 POST {{baseUrl}}
 Content-Type: application/json
