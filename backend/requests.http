@@ -1,0 +1,50 @@
+@baseUrl = http://localhost:3000/furniture
+
+
+GET {{baseUrl}}
+
+
+GET {{baseUrl}}/1
+
+
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "name": "Meja Makan Jati 6 Kursi",
+  "category": "Meja",
+  "price": 5200000,
+  "desc": "Meja makan kayu jati solid dengan 6 kursi.",
+  "image": "https://images.unsplash.com/photo-1617806118233-18e1de247200?w=600&q=70"
+}
+
+PATCH {{baseUrl}}/1
+Content-Type: application/json
+
+{
+  "price": 4500000
+}
+
+DELETE {{baseUrl}}/2
+
+
+GET {{baseUrl}}/999
+
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "name": "Sofa Nordic 3 Dudukan",
+  "category": "Sofa",
+  "price": 1000000
+}
+
+
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "name": "Ab",
+  "category": "Kasur",
+  "price": -5
+}
