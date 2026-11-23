@@ -5,6 +5,7 @@ import { rupiahFormat } from '../utils/rupiah.format';
 interface CardProps {
     furniture: Furniture;
     onDelete: (id: number) => void;
+    onEdit: (item: Furniture) => void;
 }
 
 const IMAGE = 'data:image/svg+xml;utf8,' +
@@ -15,7 +16,7 @@ const IMAGE = 'data:image/svg+xml;utf8,' +
      </svg>`
     );
 
-const Card = ({ furniture, onDelete }: CardProps) => {
+const Card = ({ furniture, onDelete, onEdit }: CardProps) => {
     const { id, name, category, price, desc, image } = furniture;
 
     return (
@@ -42,12 +43,17 @@ const Card = ({ furniture, onDelete }: CardProps) => {
 
                 <div className="mt-6 flex items-center justify-between">
                     <p className="text-lg font-semibold tracking-tight">{rupiahFormat(price)}</p>
-                    <button
-                        onClick={() => onDelete(id)}
-                        className="text-sm text-brand-blue transition hover:underline"
-                    >
-                        Delete
-                    </button>
+                    <div className="flex gap-4">
+                        <button onClick={() => onEdit(furniture)} className="text-sm text-orange-500 transition hover:underline">
+                            Edit
+                        </button>
+                        <button
+                            onClick={() => onDelete(id)}
+                            className="text-sm text-red-500 transition hover:underline"
+                        >
+                            Delete
+                        </button>
+                    </div>
                 </div>
             </div>
         </article>

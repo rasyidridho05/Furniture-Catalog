@@ -1,6 +1,10 @@
-import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react'
+import { useState, useEffect } from 'react';
+import type { ChangeEvent, FormEvent } from 'react';
 import { ListCategory } from '../types/furniture';
 import type { CategoryFurniture } from '../types/furniture';
+import type { Furniture } from '../types/furniture';
+
+
 
 export interface DataForm {
     name: string;
@@ -11,7 +15,8 @@ export interface DataForm {
 }
 
 interface FormAddProps {
-    onAdd: (data: DataForm) => void;
+    initial?: Furniture;
+    onAdd: (data: DataForm) => Promise<void> | void;
     onClose: () => void;
 }
 
@@ -26,8 +31,17 @@ const defaultForm = {
 const label = 'flex flex-col gap-2 text-sm font-medium';
 const input = 'rounded-xl border border-black/10 bg-brand-bg px-2 py-3 text-base font-normal outline-none transition placeholder:text-black/30 focus:border-brand-blue focus:bg-white focus:ring-4 focus:ring-brand-blue/15';
 
-const FormAdd = ({ onAdd, onClose }: FormAddProps) => {
-    const [form, setForm] = useState(defaultForm);
+const FormAdd = ({ initial, onAdd, onClose }: FormAddProps) => {
+    const [form, setForm] = useState(initial
+        ? {
+            name: initial.name,
+            category: initial.category,
+            price: String(initial.price),
+            desc: initial.desc,
+            image: initial.image,
+        }
+        : defaultForm
+    );
     const [error, setError] = useState('');
 
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -51,7 +65,7 @@ const FormAdd = ({ onAdd, onClose }: FormAddProps) => {
     }, [onClose]);
 
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         const price = Number(form.price);
@@ -60,17 +74,18 @@ const FormAdd = ({ onAdd, onClose }: FormAddProps) => {
             return;
         }
 
-        onAdd({
-            name: form.name.trim(),
-            category: form.category,
-            price,
-            desc: form.desc.trim() || 'Belum ada deskripsi.',
-            image: form.image.trim(),
-        });
-        onClose();
-
-        setForm(defaultForm);
-        setError('');
+        try {
+            await onAdd({
+                name: form.name.trim(),
+                category: form.category,
+                price,
+                desc: form.desc.trim() || 'Belum ada deskripsi.',
+                image: form.image.trim(),
+            });
+            onClose();
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Gagal menyimpan data');
+        }
     };
 
     return (
@@ -95,7 +110,7 @@ const FormAdd = ({ onAdd, onClose }: FormAddProps) => {
                     </button>
 
                     <div className="mb-2 text-center">
-                        <h2 className="text-3xl font-semibold tracking-tight">Add new Furniture</h2>
+                        <h2 className="text-3xl font-semibold tracking-tight">{initial ? 'Edit Furniture' : 'Add new Furniture'}</h2>
                         <p className="mt-1 text-brand-gray">Lengkapi detail untuk menambahkan ke katalog.</p>
                     </div>
 
@@ -172,10 +187,9 @@ const FormAdd = ({ onAdd, onClose }: FormAddProps) => {
                         type="submit"
                         className="mx-auto mt-2 rounded-full bg-brand-blue px-8 py-3 text-base font-medium text-white transition hover:bg-brand-blue-hover active:scale-[0.98]"
                     >
-                        Add
+                        {initial ? 'Save' : 'Add'}
                     </button>
                 </form>
-
             </div>
         </>
     )

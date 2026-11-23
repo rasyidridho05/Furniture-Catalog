@@ -6,9 +6,10 @@ interface ListProps {
     list: Furniture[];
     onDelete: (id: number) => void;
     onOpenedForm: () => void;
+    onEdit: (item: Furniture) => void;
 }
 
-const List = ({ list, onDelete, onOpenedForm }: ListProps) => {
+const List = ({ list, onDelete, onOpenedForm, onEdit }: ListProps) => {
     return (
         <>
             <section>
@@ -31,7 +32,7 @@ const List = ({ list, onDelete, onOpenedForm }: ListProps) => {
                 ) : (
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                         {list.map((item) => (
-                            <Card key={item.id} furniture={item} onDelete={onDelete} />
+                            <Card key={item.id} furniture={item} onDelete={onDelete} onEdit={onEdit} />
                         ))}
                     </div>
                 )}
